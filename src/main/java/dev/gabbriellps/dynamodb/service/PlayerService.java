@@ -42,4 +42,14 @@ public class PlayerService {
 
         return response.items().stream().collect(Collectors.toList());
     }
+
+    public PlayerHistoryEntity findById(String username, String gameId) {
+        Key key = Key.builder()
+                .partitionValue(username)
+                .sortValue(gameId)
+                .build();
+
+        return dynamoDbTemplate.load(key, PlayerHistoryEntity.class);
+    }
+
 }

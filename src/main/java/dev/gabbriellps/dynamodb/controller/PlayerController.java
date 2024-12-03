@@ -3,10 +3,13 @@ package dev.gabbriellps.dynamodb.controller;
 import dev.gabbriellps.dynamodb.dto.ScoreDTO;
 import dev.gabbriellps.dynamodb.entity.PlayerHistoryEntity;
 import dev.gabbriellps.dynamodb.service.PlayerService;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/v1/players")
@@ -31,5 +34,18 @@ public class PlayerController {
 
         return ResponseEntity.ok(playerService.listByUsername(username));
     }
+
+    @GetMapping("/{username}/games/{gameId}")
+    ResponseEntity<PlayerHistoryEntity> findById(@PathVariable("username") String username,
+                                                 @PathVariable("gameId") String gameId) {
+        PlayerHistoryEntity response = playerService.findById(username, gameId);
+
+        if(Objects.isNull(response)){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+    
 
 }
