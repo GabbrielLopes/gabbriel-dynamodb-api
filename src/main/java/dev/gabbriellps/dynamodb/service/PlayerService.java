@@ -70,4 +70,16 @@ public class PlayerService {
         return dynamoDbTemplate.save(player);
     }
 
+    public void deletePlayerHistory(String username, String gameId) {
+        Key key = Key.builder()
+                .partitionValue(username)
+                .sortValue(gameId)
+                .build();
+
+        PlayerHistoryEntity player = dynamoDbTemplate.load(key, PlayerHistoryEntity.class);
+
+        if(Objects.nonNull(player)){
+            dynamoDbTemplate.delete(player);
+        }
+    }
 }

@@ -60,5 +60,12 @@ public class PlayerController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{username}/games/{gameId}")
+    ResponseEntity<?> update(@PathVariable("username") String username,
+                                                 @PathVariable("gameId") String gameId) {
+        playerService.deletePlayerHistory(username, gameId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
