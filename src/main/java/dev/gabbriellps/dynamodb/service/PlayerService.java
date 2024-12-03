@@ -10,6 +10,7 @@ import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +51,23 @@ public class PlayerService {
                 .build();
 
         return dynamoDbTemplate.load(key, PlayerHistoryEntity.class);
+    }
+
+    public PlayerHistoryEntity updatePlayerHistory(String username, String gameId, ScoreDTO requestDTO) {
+        Key key = Key.builder()
+                .partitionValue(username)
+                .sortValue(gameId)
+                .build();
+
+        PlayerHistoryEntity player = dynamoDbTemplate.load(key, PlayerHistoryEntity.class);
+
+        if(Objects.isNull(player)) {
+            return null;
+        }
+
+        player.setScore(requestDTO.score());
+
+        return dynamoDbTemplate.save(player);
     }
 
 }

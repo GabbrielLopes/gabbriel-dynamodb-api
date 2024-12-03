@@ -46,6 +46,19 @@ public class PlayerController {
 
         return ResponseEntity.ok(response);
     }
-    
+
+    @PutMapping("/{username}/games/{gameId}")
+    ResponseEntity<?> update(@PathVariable("username") String username,
+                                                 @PathVariable("gameId") String gameId,
+                                               @RequestBody ScoreDTO requestDTO) {
+        PlayerHistoryEntity response = playerService.updatePlayerHistory(username, gameId, requestDTO);
+
+        if(Objects.isNull(response)){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }
